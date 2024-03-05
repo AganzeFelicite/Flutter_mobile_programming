@@ -4,6 +4,10 @@ import '../theme/light_theme.dart';
 import '../theme/dark_theme.dart';
 import '../components/app_bar.dart';
 import '../pages/settings.dart';
+import '../pages/contacts.dart';
+import '../pages/images.dart';
+import '../pages/login.dart';
+import '../components/myAvatar.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -14,22 +18,114 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int currentPageIndex = 0;
+  bool isLoggedIn = true;
 
   @override
   Widget build(BuildContext context) {
+    // List<Widget> pages = [
+    //   LoginPage(),
+    // ];
     List<Widget> pages = [
       Container(
         width: double.infinity,
         height: double.infinity,
         color: Theme.of(context).colorScheme.primary,
       ),
-      Calculator(),
+      Contacts(),
       SettingsPage(),
+      PhoneImages(),
+      Calculator(),
     ];
     return Scaffold(
       appBar:
           currentPageIndex == 0 ? CustomAppBar(appBarText: 'Home Page') : null,
       body: pages[currentPageIndex],
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            DrawerHeader(
+              child: Column(
+                children: [
+                  Center(child: MyAvatarWidget()),
+                  SizedBox(height: 8),
+                  Text('John Doe'),
+                ],
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.home),
+              title: Text('Home'),
+              onTap: () {
+                setState(() {
+                  currentPageIndex = 0;
+                });
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.contacts),
+              title: Text('Contacts'),
+              onTap: () {
+                setState(() {
+                  currentPageIndex = 1;
+                });
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('Settings'),
+              onTap: () {
+                setState(() {
+                  currentPageIndex = 2;
+                });
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.image),
+              title: Text('Gallery'),
+              onTap: () {
+                setState(() {
+                  currentPageIndex = 3;
+                });
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.calculate),
+              title: Text('Calculator'),
+              onTap: () {
+                setState(() {
+                  currentPageIndex = 4;
+                });
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.quiz),
+              title: Text('Quizz'),
+              onTap: () {
+                setState(() {
+                  currentPageIndex = 5;
+                });
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.logout),
+              title: Text('Logout'),
+              onTap: () {
+                setState(() {
+                  isLoggedIn = false;
+                  Navigator.pushReplacementNamed(context, '/login');
+                });
+                // Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
       bottomNavigationBar: NavigationBar(
         destinations: const [
           NavigationDestination(icon: Icon(Icons.home), label: 'home'),
@@ -42,9 +138,33 @@ class _HomeState extends State<Home> {
         ],
         selectedIndex: currentPageIndex,
         onDestinationSelected: (int index) {
-          setState(() {
-            currentPageIndex = index;
-          });
+          if (isLoggedIn) {
+            setState(() {
+              currentPageIndex = index;
+            });
+          } else {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('Unauthorized Access'),
+                  content: Text('Please login to access this page.'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        // Redirect to login page
+                        setState(() {
+                          currentPageIndex = 0;
+                        });
+                      },
+                      child: Text('OK'),
+                    ),
+                  ],
+                );
+              },
+            );
+          }
         },
         indicatorColor: Theme.of(context).colorScheme.secondary,
       ),

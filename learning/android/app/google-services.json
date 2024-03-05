@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "958914153033",
+    "project_id": "learnng-e7621",
+    "storage_bucket": "learnng-e7621.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:958914153033:android:5e6986076c16ea4d3e4d98",
+        "android_client_info": {
+          "package_name": "com.example.learning"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtRD0fY6OjMtWgUHWH8Xgy6CatGVJ_5d4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
