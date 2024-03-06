@@ -6,6 +6,7 @@ import './provider/provider.dart';
 import 'package:provider/provider.dart';
 import './theme/dark_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'pages/signup.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,8 +30,10 @@ class _MyAppState extends State<MyApp> {
           Consumer<UiProvider>(builder: (context, UiProvider notifier, child) {
         return MaterialApp(
           routes: {
-            '/home': (context) => Home(),
+            '/home': (context) =>
+                Home(userRole: Provider.of<UiProvider>(context).userRole),
             '/login': (context) => LoginPage(),
+            '/signup': (context) => SignUpPage(),
           },
           debugShowCheckedModeBanner: false,
           title: 'Dark Theme',

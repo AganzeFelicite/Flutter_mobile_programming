@@ -8,9 +8,12 @@ import '../pages/contacts.dart';
 import '../pages/images.dart';
 import '../pages/login.dart';
 import '../components/myAvatar.dart';
+import '../pages/admin.dart';
+import '../pages/userQuizzPage.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  final String userRole;
+  Home({Key? key, required this.userRole}) : super(key: key);
 
   @override
   State<Home> createState() => _HomeState();
@@ -19,12 +22,19 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int currentPageIndex = 0;
   bool isLoggedIn = true;
+  bool admin = false;
 
   @override
   Widget build(BuildContext context) {
-    // List<Widget> pages = [
-    //   LoginPage(),
-    // ];
+    final Map<String, dynamic>? args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final String userRole = args?['userRole'] ?? '';
+
+    if (userRole == 'admin') {
+      admin = true;
+    } else {
+      admin = false;
+    }
     List<Widget> pages = [
       Container(
         width: double.infinity,
@@ -35,6 +45,7 @@ class _HomeState extends State<Home> {
       SettingsPage(),
       PhoneImages(),
       Calculator(),
+      if (admin) QuizzAdminPage() else QuizzUserPage(),
     ];
     return Scaffold(
       appBar:

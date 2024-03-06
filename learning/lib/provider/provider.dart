@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class UiProvider extends ChangeNotifier {
   bool _isDark = false;
   bool get isDark => _isDark;
-
+  String userRole = '';
   ThemeData _themeData1 = lightMode;
   ThemeData _themeData2 = darkMode;
   ThemeData get themeData2 => _themeData2;
@@ -25,6 +25,7 @@ class UiProvider extends ChangeNotifier {
 
     //Save the value to secure storage
     storage.setBool("isDark", _isDark);
+    userRole = 'admin';
     notifyListeners();
   }
 
