@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learning/auth/user_auth_/firebase_auth_services.dart';
 import 'package:learning/pages/calculator.dart';
 import '../theme/light_theme.dart';
 import '../theme/dark_theme.dart';
@@ -26,11 +27,12 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final FirebaseAuthService _auth = FirebaseAuthService();
     final Map<String, dynamic>? args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     final String userRole = args?['userRole'] ?? '';
 
-    if (userRole == 'admin') {
+    if (userRole == 'admin@gmail.com') {
       admin = true;
     } else {
       admin = false;
@@ -45,7 +47,7 @@ class _HomeState extends State<Home> {
       SettingsPage(),
       PhoneImages(),
       Calculator(),
-      if (admin) QuizzAdminPage() else QuizzUserPage(),
+      if (admin) AdminForm() else StudentScreen(),
     ];
     return Scaffold(
       appBar:
@@ -128,7 +130,9 @@ class _HomeState extends State<Home> {
               title: Text('Logout'),
               onTap: () {
                 setState(() {
+                  _auth.signOut();
                   isLoggedIn = false;
+
                   Navigator.pushReplacementNamed(context, '/login');
                 });
                 // Navigator.pop(context);

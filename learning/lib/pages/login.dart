@@ -1,4 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:learning/auth/user_auth_/firebase_auth_services.dart';
+import 'package:learning/components/toast.dart';
 import '../components/app_bar.dart';
 import '../theme/dark_theme.dart';
 import '../theme/light_theme.dart';
@@ -9,6 +12,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final FirebaseAuthService _auth = FirebaseAuthService();
+
   @override
   Widget build(BuildContext context) {
     TextEditingController emailController = TextEditingController();
@@ -19,6 +24,22 @@ class _LoginPageState extends State<LoginPage> {
       emailController.dispose();
       passwordController.dispose();
       super.dispose();
+    }
+
+    void _login() async {
+      String email = emailController.text;
+      String password = passwordController.text;
+
+      User? user = await _auth.signIn(email, password);
+      StyledToastComponent.showSuccessToast('successfully logged in', context);
+      if (user != null) {
+        Navigator.pushReplacementNamed(context, '/home', arguments: {
+          'userRole': email,
+        });
+      } else {
+        StyledToastComponent.showErrorToast(
+            'Invalid email or password', context);
+      }
     }
 
     return Scaffold(
@@ -62,15 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
-                        onPressed: () {
-                          String email = emailController.text;
-                          String password = passwordController.text;
-
-                          Navigator.pushReplacementNamed(context, '/home',
-                              arguments: {
-                                'userRole': email,
-                              });
-                        },
+                        onPressed: _login,
                         style: ElevatedButton.styleFrom(
                             backgroundColor:
                                 Theme.of(context).colorScheme.onPrimary,
